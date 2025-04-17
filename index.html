@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerador de Senhas</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background-color: #111;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #333;
+    }
+    input[type=range] {
+      width: 100%;
+    }
+    button {
+      background-color: #222;
+      color: white;
+      border: 1px solid white;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .senha {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 20px;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Gerador de Senhas</h2>
+    <label for="tamanho">Tamanho da senha: <span id="tamanho-label">8</span> caracteres</label>
+    <input type="range" id="tamanho" min="6" max="12" value="8">
+    
+    <button onclick="gerarSenha()">Gerar Senha</button>
+
+    <div class="senha" id="resultado"></div>
+  </div>
+
+  <script>
+    document.getElementById("tamanho").addEventListener("input", function () {
+      document.getElementById("tamanho-label").innerText = this.value;
+    });
+
+    function gerarSenha() {
+      const tamanho = parseInt(document.getElementById("tamanho").value);
+
+      fetch('/gerar-senha', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ tamanho: tamanho })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("resultado").innerText = data.senha;
+      });
+    }
+  </script>
+</body>
+</html>
